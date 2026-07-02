@@ -1,15 +1,16 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../app/app_theme.dart';
 import '../../../../core/constants/constants.dart';
-
+import '../../domain/entities/weather_entity.dart';
 import '../providers/settings_provider.dart';
 import '../providers/weather_provider.dart';
 import '../widgets/common_widgets.dart';
 
-/// Weather details screen showing all metrics
+/// Weather details screen showing comprehensive metrics
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
 
@@ -41,7 +42,6 @@ class DetailsScreen extends StatelessWidget {
           final weather = weatherProvider.weather!;
           final current = weather.current;
           final hourly = weather.hourly;
-          final daily = weather.daily;
 
           return Column(
             children: [
@@ -52,25 +52,21 @@ class DetailsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Current Temperature Section
+                      // Current Temperature
                       _buildCurrentSection(context, current, settingsProvider),
                       SizedBox(height: AppTheme.spacing24.h),
 
-                      // Primary Metrics Grid
+                      // Key Metrics Grid
                       _buildMetricsGrid(context, current, settingsProvider),
                       SizedBox(height: AppTheme.spacing24.h),
 
-                      // Advanced Metrics
-                      _buildAdvancedMetrics(context, current, settingsProvider),
+                      // Sun Times
+                      _buildSunTimes(context, current),
                       SizedBox(height: AppTheme.spacing24.h),
 
-                      // Sunrise & Sunset
-                      if (daily.sunrises.isNotEmpty)
-                        _buildSunriseSunset(context, daily, settingsProvider),
-                      SizedBox(height: AppTheme.spacing24.h),
-
-                      // Hourly Forecast Preview
-                      _buildHourlyPreview(context, hourly, settingsProvider),
+                      // Hourly Forecast
+                      _buildHourlyForecast(context, hourly, settingsProvider),
+                      SizedBox(height: AppTheme.spacing32.h),
                     ],
                   ),
                 ),
@@ -85,17 +81,18 @@ class DetailsScreen extends StatelessWidget {
   /// Current weather section
   Widget _buildCurrentSection(
     BuildContext context,
-    CurrentWeather current,
+    CurrentWeatherEntity current,
     SettingsProvider settings,
   ) {
-    final temp = _convertTemperature(
-      current.temperature,
-      settings.temperatureUnit,
-    );
-    final feelsLike = _convertTemperature(
-      current.feelsLike,
-      settings.temperatureUnit,
-    );
+    final tempUnit = settings.temperatureUnit == TemperatureUnit.celsius
+        ? '°C'
+        : '°F';
+    final temp = settings.temperatureUnit == TemperatureUnit.celsius
+        ? current.temperature.toStringAsFixed(1)
+        : ((current.temperature * 9 / 5) + 32).toStringAsFixed(1);
+    final feelsLike = settings.temperatureUnit == TemperatureUnit.celsius
+        ? current.feelsLike.toStringAsFixed(1)
+        : ((current.feelsLike * 9 / 5) + 32).toStringAsFixed(1);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,13 +122,13 @@ class DetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '$temp${settings.temperatureUnitString}',
+                        '$temp$tempUnit',
                         style: Theme.of(context).textTheme.displaySmall
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: AppTheme.spacing4.h),
                       Text(
-                        'Feels like $feelsLike${settings.temperatureUnitString}',
+                        'Feels like $feelsLike$tempUnit',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -143,13 +140,6 @@ class DetailsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: AppTheme.spacing12.h),
-              Text(
-                current.weatherDescription,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-              ),
             ],
           ),
         ),
@@ -157,20 +147,19 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  /// Metrics grid (humidity, wind, pressure, visibility)
+  /// Metrics grid
   Widget _buildMetricsGrid(
     BuildContext context,
-    CurrentWeather current,
+    CurrentWeatherEntity current,
     SettingsProvider settings,
   ) {
-    final windSpeed = _convertWindSpeed(
-      current.windSpeed10m,
+    final windSpeedStr = _formatWindSpeed(
+      current.windSpeed,
       settings.windSpeedUnit,
     );
-    final pressure = _convertPressure(
-      current.surfacePressure,
-      settings.pressureUnit,
-    );
+    final pressureStr = settings.pressureUnit == PressureUnit.hpa
+        ? '${current.pressure.toStringAsFixed(1)} hPa'
+        : '${current.pressure.toStringAsFixed(1)} mb';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,25 +176,15 @@ class DetailsScreen extends StatelessWidget {
             _buildMetricCard(
               context,
               'Humidity',
-              '${current.relativeHumidity2m.toStringAsFixed(0)}%',
+              '${current.humidity}%',
               Icons.opacity,
             ),
-            _buildMetricCard(
-              context,
-              'Wind Speed',
-              '$windSpeed ${settings.windSpeedUnitString}',
-              Icons.air,
-            ),
-            _buildMetricCard(
-              context,
-              'Pressure',
-              '$pressure ${settings.pressureUnitString}',
-              Icons.compress,
-            ),
+            _buildMetricCard(context, 'Wind Speed', windSpeedStr, Icons.air),
+            _buildMetricCard(context, 'Pressure', pressureStr, Icons.compress),
             _buildMetricCard(
               context,
               'Visibility',
-              '${current.visibility.toStringAsFixed(1)} km',
+              '${(current.visibility / 1000).toStringAsFixed(1)} km',
               Icons.visibility,
             ),
           ],
@@ -214,58 +193,14 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  /// Advanced metrics section
-  Widget _buildAdvancedMetrics(
-    BuildContext context,
-    CurrentWeather current,
-    SettingsProvider settings,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Additional Information',
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        SizedBox(height: AppTheme.spacing12.h),
-        _buildMetricsList(context, [
-          (
-            'Cloud Coverage',
-            '${current.cloudCover.toStringAsFixed(0)}%',
-            Icons.cloud,
-          ),
-          ('UV Index', '${current.uvIndex.toStringAsFixed(1)}', Icons.wb_sunny),
-          (
-            'Wind Direction',
-            '${current.windDirection10m.toStringAsFixed(0)}°',
-            Icons.north,
-          ),
-          (
-            'Dew Point',
-            '${_convertTemperature(current.dewPoint2m, settings.temperatureUnit).toStringAsFixed(1)}${settings.temperatureUnitString}',
-            Icons.water_drop,
-          ),
-        ]),
-      ],
-    );
-  }
-
-  /// Sunrise and sunset section
-  Widget _buildSunriseSunset(
-    BuildContext context,
-    DailyWeather daily,
-    SettingsProvider settings,
-  ) {
-    final sunrise = daily.sunrise[0];
-    final sunset = daily.sunset[0];
+  /// Sun times section
+  Widget _buildSunTimes(BuildContext context, CurrentWeatherEntity current) {
+    final timeFormat24h = DateFormat('HH:mm');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Sun Information',
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
+        Text('Sun Times', style: Theme.of(context).textTheme.headlineSmall),
         SizedBox(height: AppTheme.spacing12.h),
         Row(
           children: [
@@ -273,7 +208,7 @@ class DetailsScreen extends StatelessWidget {
               child: _buildSunInfoCard(
                 context,
                 'Sunrise',
-                sunrise.formatTime(settings.timeFormat),
+                timeFormat24h.format(current.sunrise),
                 Icons.sunny,
               ),
             ),
@@ -282,7 +217,7 @@ class DetailsScreen extends StatelessWidget {
               child: _buildSunInfoCard(
                 context,
                 'Sunset',
-                sunset.formatTime(settings.timeFormat),
+                timeFormat24h.format(current.sunset),
                 Icons.dark_mode,
               ),
             ),
@@ -293,16 +228,18 @@ class DetailsScreen extends StatelessWidget {
   }
 
   /// Hourly forecast preview
-  Widget _buildHourlyPreview(
+  Widget _buildHourlyForecast(
     BuildContext context,
-    HourlyWeather hourly,
+    HourlyWeatherEntity hourly,
     SettingsProvider settings,
   ) {
+    final count = hourly.times.length < 12 ? hourly.times.length : 12;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Hourly Forecast (Next 12 Hours)',
+          'Hourly Forecast (Next $count Hours)',
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         SizedBox(height: AppTheme.spacing12.h),
@@ -310,24 +247,26 @@ class DetailsScreen extends StatelessWidget {
           height: 100.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: (hourly.times.length < 12 ? hourly.times.length : 12),
+            itemCount: count,
             itemBuilder: (context, index) {
-              final temp = _convertTemperature(
-                hourly.temperatures[index],
-                settings.temperatureUnit,
-              );
+              final temp = settings.temperatureUnit == TemperatureUnit.celsius
+                  ? hourly.temperatures[index].toStringAsFixed(0)
+                  : ((hourly.temperatures[index] * 9 / 5) + 32).toStringAsFixed(
+                      0,
+                    );
+
               return Padding(
                 padding: EdgeInsets.only(right: AppTheme.spacing12.w),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      hourly.times[index].formatTime(settings.timeFormat),
+                      '${hourly.times[index].hour.toString().padLeft(2, '0')}:00',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     SizedBox(height: AppTheme.spacing8.h),
                     Icon(
-                      _getWeatherIcon(hourly.weatherCode[index]),
+                      _getWeatherIcon(hourly.weatherCodes[index]),
                       size: 24.sp,
                     ),
                     SizedBox(height: AppTheme.spacing8.h),
@@ -354,48 +293,35 @@ class DetailsScreen extends StatelessWidget {
     String value,
     IconData icon,
   ) {
-    return MetricCard(
-      label: label,
-      value: value,
-      icon: icon,
-      backgroundColor: Theme.of(context).cardColor,
-    );
-  }
-
-  /// Build metrics list
-  Widget _buildMetricsList(
-    BuildContext context,
-    List<(String, String, IconData)> metrics,
-  ) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: metrics.length,
-      separatorBuilder: (_, _) => CustomDivider(height: 1),
-      itemBuilder: (context, index) {
-        final (label, value, icon) = metrics[index];
-        return Padding(
-          padding: EdgeInsets.symmetric(vertical: AppTheme.spacing12.h),
-          child: Row(
-            children: [
-              Icon(icon, size: 20.sp, color: Theme.of(context).primaryColor),
-              SizedBox(width: AppTheme.spacing12.w),
-              Expanded(
-                child: Text(
-                  label,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-              Text(
-                value,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-              ),
-            ],
+    return Container(
+      padding: EdgeInsets.all(AppTheme.spacing16.w),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
+        border: Border.all(color: Theme.of(context).dividerColor),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 28.sp, color: Theme.of(context).primaryColor),
+          SizedBox(height: AppTheme.spacing8.h),
+          Text(
+            label,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
+            textAlign: TextAlign.center,
           ),
-        );
-      },
+          SizedBox(height: AppTheme.spacing4.h),
+          Text(
+            value,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 
@@ -411,13 +337,7 @@ class DetailsScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: Theme.of(context).dividerColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -437,32 +357,19 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  // Helper methods for conversions
-  double _convertTemperature(double celsius, TemperatureUnit unit) {
-    if (unit == TemperatureUnit.fahrenheit) {
-      return (celsius * 9 / 5) + 32;
-    }
-    return celsius;
-  }
-
-  double _convertWindSpeed(double kmh, WindSpeedUnit unit) {
+  /// Format wind speed based on unit
+  String _formatWindSpeed(double kmh, WindSpeedUnit unit) {
     switch (unit) {
       case WindSpeedUnit.kmh:
-        return kmh;
+        return '${kmh.toStringAsFixed(1)} km/h';
       case WindSpeedUnit.ms:
-        return kmh / 3.6;
+        return '${(kmh / 3.6).toStringAsFixed(1)} m/s';
       case WindSpeedUnit.mph:
-        return kmh / 1.60934;
+        return '${(kmh / 1.60934).toStringAsFixed(1)} mph';
     }
   }
 
-  double _convertPressure(double hpa, PressureUnit unit) {
-    if (unit == PressureUnit.mb) {
-      return hpa;
-    }
-    return hpa;
-  }
-
+  /// Get weather icon based on code
   IconData _getWeatherIcon(int weatherCode) {
     if (weatherCode == 0 || weatherCode == 1) {
       return Icons.wb_sunny;
@@ -474,12 +381,9 @@ class DetailsScreen extends StatelessWidget {
       return Icons.cloud_queue;
     } else if (weatherCode >= 71 && weatherCode <= 77) {
       return Icons.ac_unit;
-    } else if (weatherCode >= 80 && weatherCode <= 82) {
+    } else if ((weatherCode >= 80 && weatherCode <= 82) ||
+        (weatherCode >= 85 && weatherCode <= 86)) {
       return Icons.grain;
-    } else if (weatherCode >= 85 && weatherCode <= 86) {
-      return Icons.ac_unit;
-    } else if (weatherCode == 80 || weatherCode == 81 || weatherCode == 82) {
-      return Icons.cloud_queue;
     } else if (weatherCode >= 90 && weatherCode <= 99) {
       return Icons.thunderstorm;
     }

@@ -11,7 +11,7 @@ class BottomNavWrapper extends StatefulWidget {
   const BottomNavWrapper({super.key});
 
   @override
-  State<BottomNavWrapperState> createState() => _BottomNavWrapperState();
+  State<BottomNavWrapper> createState() => _BottomNavWrapperState();
 }
 
 class _BottomNavWrapperState extends State<BottomNavWrapper> {
