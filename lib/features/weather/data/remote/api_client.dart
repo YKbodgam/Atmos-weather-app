@@ -17,7 +17,7 @@ class ApiClient {
   void _setupDio() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: ApiConstants.baseUrl,
+        baseUrl: ApiConstants.weatherUrl,
         connectTimeout: const Duration(
           milliseconds: ApiConstants.connectTimeout,
         ),
@@ -48,11 +48,12 @@ class ApiClient {
 
   /// Get request
   Future<dynamic> get(
-    String path, {
+    String url, {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      final response = await _dio.get(path, queryParameters: queryParameters);
+      final response = await _dio.get(url, queryParameters: queryParameters);
+
       return response.data;
     } on DioException catch (e) {
       throw _handleDioException(e);

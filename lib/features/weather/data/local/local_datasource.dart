@@ -70,9 +70,9 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
         'longitude': weather.longitude,
         'timezone': weather.timezone,
         'current': {
-          'temperature': weather.current.temperature,
+          'temperature_2m': weather.current.temperature,
           'apparent_temperature': weather.current.apparentTemperature,
-          'relative_humidity': weather.current.relativeHumidity,
+          'relative_humidity_2m': weather.current.relativeHumidity,
           'weather_code': weather.current.weatherCode,
           'wind_speed_10m': weather.current.windSpeed10m,
           'surface_pressure': weather.current.surfacePressure,

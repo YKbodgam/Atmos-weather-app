@@ -29,12 +29,12 @@ class RemoteWeatherDataSourceImpl implements RemoteWeatherDataSource {
   }) async {
     try {
       final response = await apiClient.get(
-        ApiConstants.weatherEndpoint,
+        ApiConstants.weatherUrl,
         queryParameters: {
           'latitude': latitude,
           'longitude': longitude,
           'current':
-              'temperature,apparent_temperature,is_day,weather_code,wind_speed_10m,relative_humidity,surface_pressure,visibility,uv_index',
+              'temperature_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,relative_humidity_2m,surface_pressure,visibility,uv_index',
           'hourly': 'temperature_2m,weather_code,wind_speed_10m',
           'daily':
               'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,wind_speed_10m_max',
@@ -54,7 +54,7 @@ class RemoteWeatherDataSourceImpl implements RemoteWeatherDataSource {
   Future<GeocodingResponseDto> searchCities({required String query}) async {
     try {
       final response = await apiClient.get(
-        ApiConstants.geocodingEndpoint,
+        ApiConstants.geocodingUrl,
         queryParameters: {
           'name': query,
           'count': 10,

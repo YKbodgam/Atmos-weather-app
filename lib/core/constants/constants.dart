@@ -1,8 +1,10 @@
 /// API Constants
 class ApiConstants {
-  static const String baseUrl = 'https://api.open-meteo.com/v1';
-  static const String weatherEndpoint = '/forecast';
-  static const String geocodingEndpoint = '/search';
+  ApiConstants._();
+
+  static const weatherUrl = 'https://api.open-meteo.com/v1/forecast';
+  static const geocodingUrl = 'https://geocoding-api.open-meteo.com/v1/search';
+
   static const int connectTimeout = 15000; // ms
   static const int receiveTimeout = 15000; // ms
 }

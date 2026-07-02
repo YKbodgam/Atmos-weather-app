@@ -26,10 +26,10 @@ class CurrentWeatherDto {
 
   factory CurrentWeatherDto.fromJson(Map<String, dynamic> json) {
     return CurrentWeatherDto(
-      temperature: (json['temperature'] as num?)?.toDouble() ?? 0.0,
+      temperature: (json['temperature_2m'] as num?)?.toDouble() ?? 0.0,
       apparentTemperature:
           (json['apparent_temperature'] as num?)?.toDouble() ?? 0.0,
-      relativeHumidity: (json['relative_humidity'] as num?)?.toInt() ?? 0,
+      relativeHumidity: (json['relative_humidity_2m'] as num?)?.toInt() ?? 0,
       weatherCode: (json['weather_code'] as num?)?.toInt() ?? 0,
       windSpeed10m: (json['wind_speed_10m'] as num?)?.toDouble() ?? 0.0,
       surfacePressure: (json['surface_pressure'] as num?)?.toDouble() ?? 0.0,
