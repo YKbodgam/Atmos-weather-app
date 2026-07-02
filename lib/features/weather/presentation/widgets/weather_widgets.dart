@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:atmos/app/app_theme.dart';
-import 'package:atmos/core/constants/constants.dart';
-import 'package:atmos/core/extensions/extensions.dart';
-import 'package:atmos/features/weather/domain/entities/weather_entity.dart';
+import '../../../../app/app_theme.dart';
+import '../../../../core/constants/constants.dart';
+import '../../../../core/extensions/extensions.dart';
+import '../../domain/entities/weather_entity.dart';
 import 'common_widgets.dart';
 
 /// Current weather display section

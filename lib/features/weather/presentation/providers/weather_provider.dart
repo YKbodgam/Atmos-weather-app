@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:atmos/core/error/failure_handler.dart';
-import 'package:atmos/features/weather/domain/entities/weather_entity.dart';
-import 'package:atmos/features/weather/domain/usecases/weather_usecases.dart';
+
+import '../../../../core/error/failure_handler.dart';
+
+import '../../domain/entities/weather_entity.dart';
+import '../../domain/usecases/weather_usecases.dart';
 
 /// State enum for UI
 enum WeatherState { idle, loading, success, error, offline }
@@ -18,6 +21,11 @@ class WeatherProvider extends ChangeNotifier {
   bool _isOffline = false;
   double? _currentLatitude;
   double? _currentLongitude;
+
+  // Polling variables
+  Timer? _pollingTimer;
+  int _refreshIntervalMinutes = 30;
+  bool _isAutoRefreshEnabled = true;
 
   // Getters
   WeatherState get state => _state;
@@ -96,6 +104,66 @@ class WeatherProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Set refresh interval in minutes
+  void setRefreshInterval(int minutes) {
+    _refreshIntervalMinutes = minutes;
+    _restartPolling();
+  }
+
+  /// Start auto-refresh polling
+  void startAutoRefresh() {
+    if (!_isAutoRefreshEnabled &&
+        _currentLatitude != null &&
+        _currentLongitude != null) {
+      _isAutoRefreshEnabled = true;
+      _startPolling();
+    }
+  }
+
+  /// Stop auto-refresh polling
+  void stopAutoRefresh() {
+    _isAutoRefreshEnabled = false;
+    _pollingTimer?.cancel();
+  }
+
+  /// Internal method to start polling
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    if (!_isAutoRefreshEnabled ||
+        _currentLatitude == null ||
+        _currentLongitude == null) {
+      return;
+    }
+
+    _pollingTimer = Timer.periodic(Duration(minutes: _refreshIntervalMinutes), (
+      _,
+    ) async {
+      if (_isAutoRefreshEnabled) {
+        await fetchWeather(
+          latitude: _currentLatitude!,
+          longitude: _currentLongitude!,
+        );
+      }
+    });
+  }
+
+  /// Restart polling with new interval
+  void _restartPolling() {
+    if (_isAutoRefreshEnabled) {
+      _startPolling();
+    }
+  }
+
+  /// Refresh weather manually
+  Future<void> refreshWeather() async {
+    if (_currentLatitude != null && _currentLongitude != null) {
+      await fetchWeather(
+        latitude: _currentLatitude!,
+        longitude: _currentLongitude!,
+      );
+    }
+  }
+
   /// Reset state
   void reset() {
     _state = WeatherState.idle;
@@ -104,6 +172,13 @@ class WeatherProvider extends ChangeNotifier {
     _isOffline = false;
     _currentLatitude = null;
     _currentLongitude = null;
+    _pollingTimer?.cancel();
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
   }
 }

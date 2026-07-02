@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
-import 'package:atmos/core/error/failure_handler.dart';
+import '../../../../core/error/failure_handler.dart';
+
 import '../entities/weather_entity.dart';
 import '../repositories/weather_repository.dart';
 

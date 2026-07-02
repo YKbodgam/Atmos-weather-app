@@ -1,12 +1,13 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/error/failure_handler.dart';
+import '../mapper/entity_mapper.dart';
+import '../local/local_datasource.dart';
+import '../remote/remote_datasource.dart';
+
 import '../../domain/entities/weather_entity.dart';
 import '../../domain/repositories/weather_repository.dart';
 
-import '../local/local_datasource.dart';
-import '../mapper/entity_mapper.dart';
-import '../remote/remote_datasource.dart';
+import '../../../../core/error/failure_handler.dart';
 
 /// Implementation of WeatherRepository
 class WeatherRepositoryImpl implements WeatherRepository {
@@ -47,7 +48,6 @@ class WeatherRepositoryImpl implements WeatherRepository {
       if (e is Failure) {
         return Left<Failure, WeatherEntity>(e);
       }
-
       return Left<Failure, WeatherEntity>(
         UnknownFailure(message: e.toString()),
       );

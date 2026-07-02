@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:atmos/app/app_theme.dart';
-import 'package:atmos/core/constants/constants.dart';
+
+import '../../../../app/app_theme.dart';
+import '../../../../core/constants/constants.dart';
 
 /// Loading widget with shimmer effect
 class LoadingWidget extends StatelessWidget {

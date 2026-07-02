@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:atmos/core/constants/constants.dart';
-import 'package:atmos/core/error/failure_handler.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
+import '../../../../core/constants/constants.dart';
+import '../../../../core/error/failure_handler.dart';
 
 /// HTTP client for API communication
 class ApiClient {

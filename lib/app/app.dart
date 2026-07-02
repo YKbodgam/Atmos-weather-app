@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:atmos/features/weather/presentation/screens/bottom_nav_wrapper.dart';
-import 'package:atmos/features/weather/presentation/screens/favorites_screen.dart';
+
+import '../features/weather/presentation/screens/bottom_nav_wrapper.dart';
+import '../features/weather/presentation/screens/favorites_screen.dart';
+
 import 'app_theme.dart';
 
 class AtmosApp extends StatelessWidget {

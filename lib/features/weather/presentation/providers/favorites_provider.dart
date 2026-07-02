@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:atmos/features/weather/domain/entities/weather_entity.dart';
-import 'package:atmos/features/weather/domain/usecases/weather_usecases.dart';
+
+import '../../domain/entities/weather_entity.dart';
+import '../../domain/usecases/weather_usecases.dart';
 
 /// Provider to manage favorite cities
 class FavoritesProvider extends ChangeNotifier {
@@ -49,7 +50,9 @@ class FavoritesProvider extends ChangeNotifier {
   Future<void> removeFavorite(String cityKey) async {
     try {
       await removeFromFavoritesUseCase(cityKey);
-      _favorites.removeWhere((city) => '${city.name}-${city.country}' == cityKey);
+      _favorites.removeWhere(
+        (city) => '${city.name}-${city.country}' == cityKey,
+      );
       notifyListeners();
     } catch (e) {
       rethrow;
