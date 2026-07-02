@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:atmos/app/app_theme.dart';
-import 'package:atmos/core/constants/constants.dart';
-import 'package:atmos/features/weather/presentation/providers/favorites_provider.dart';
-import 'package:atmos/features/weather/presentation/widgets/common_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../app/app_theme.dart';
+import '../../../../core/constants/constants.dart';
+import '../providers/favorites_provider.dart';
+import '../widgets/common_widgets.dart';
 
 /// Favorites screen showing saved cities
 class FavoritesScreen extends StatefulWidget {

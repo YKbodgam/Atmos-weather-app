@@ -2,10 +2,11 @@ import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:atmos/app/app_theme.dart';
-import 'package:atmos/core/constants/constants.dart';
-import 'package:atmos/features/weather/presentation/providers/search_provider.dart';
-import 'package:atmos/features/weather/presentation/widgets/common_widgets.dart';
+import '../../../../app/app_theme.dart';
+import '../../../../core/constants/constants.dart';
+
+import '../providers/search_provider.dart';
+import '../widgets/common_widgets.dart';
 
 enum SearchState { idle, loading, success, error, empty }
 
@@ -51,7 +52,8 @@ class _SearchScreenState extends State<SearchScreen> {
               controller: _searchController,
               onChanged: (value) {
                 if (value.isNotEmpty) {
-                  context.read<SearchProvider>().searchCities(value);
+                  // Use debounced search for typing
+                  context.read<SearchProvider>().searchCitiesDebounced(value);
                 } else {
                   context.read<SearchProvider>().clearSearchResults();
                 }

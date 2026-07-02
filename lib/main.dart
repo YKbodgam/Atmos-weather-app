@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:atmos/features/weather/presentation/providers/weather_provider.dart';
-import 'package:atmos/features/weather/presentation/providers/search_provider.dart';
-import 'package:atmos/features/weather/presentation/providers/favorites_provider.dart';
-import 'package:atmos/features/weather/presentation/providers/settings_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'app/app.dart';
 import 'di/service_locator.dart';
+
+import 'features/weather/presentation/providers/favorites_provider.dart';
+import 'features/weather/presentation/providers/search_provider.dart';
+import 'features/weather/presentation/providers/settings_provider.dart';
+import 'features/weather/presentation/providers/weather_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

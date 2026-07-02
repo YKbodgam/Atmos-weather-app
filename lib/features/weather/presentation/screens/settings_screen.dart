@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:atmos/app/app_theme.dart';
-import 'package:atmos/core/constants/constants.dart';
-import 'package:atmos/features/weather/presentation/providers/settings_provider.dart';
+import '../../../../app/app_theme.dart';
+import '../../../../core/constants/constants.dart';
+
+import '../providers/settings_provider.dart';
 
 /// Settings screen for app preferences
 class SettingsScreen extends StatelessWidget {
@@ -54,8 +55,8 @@ class SettingsScreen extends StatelessWidget {
                         value: settings.timeFormat == TimeFormat.twentyFourHour
                             ? '24 Hour'
                             : '12 Hour',
-                        onTap: () {
-                          settings.setTimeFormat(
+                        onTap: () async {
+                          await settings.setTimeFormat(
                             settings.timeFormat == TimeFormat.twentyFourHour
                                 ? TimeFormat.twelveHour
                                 : TimeFormat.twentyFourHour,
@@ -87,24 +88,24 @@ class SettingsScreen extends StatelessWidget {
                       _SettingsToggle(
                         title: 'Use Cellular Data',
                         value: settings.useCellularData,
-                        onChanged: (value) {
-                          settings.setUseCellularData(value);
+                        onChanged: (value) async {
+                          await settings.setUseCellularData(value);
                         },
                       ),
                       const Divider(),
                       _SettingsToggle(
                         title: UiStrings.enableNotifications,
                         value: settings.enableNotifications,
-                        onChanged: (value) {
-                          settings.setEnableNotifications(value);
+                        onChanged: (value) async {
+                          await settings.setEnableNotifications(value);
                         },
                       ),
                       const Divider(),
                       _SettingsToggle(
                         title: 'Dark Mode',
                         value: settings.darkMode,
-                        onChanged: (value) {
-                          settings.setDarkMode(value);
+                        onChanged: (value) async {
+                          await settings.setDarkMode(value);
                         },
                       ),
                     ],
@@ -157,9 +158,11 @@ class SettingsScreen extends StatelessWidget {
                               child: const Text('Cancel'),
                             ),
                             TextButton(
-                              onPressed: () {
-                                settings.resetToDefaults();
-                                Navigator.pop(context);
+                              onPressed: () async {
+                                await settings.resetToDefaults();
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                }
                               },
                               child: const Text('Reset'),
                             ),
@@ -191,53 +194,53 @@ class SettingsScreen extends StatelessWidget {
             if (type == 'Temperature') ...[
               _DialogOption(
                 title: 'Celsius',
-                onTap: () {
-                  settings.setTemperatureUnit(TemperatureUnit.celsius);
-                  Navigator.pop(context);
+                onTap: () async {
+                  await settings.setTemperatureUnit(TemperatureUnit.celsius);
+                  if (context.mounted) Navigator.pop(context);
                 },
               ),
               _DialogOption(
                 title: 'Fahrenheit',
-                onTap: () {
-                  settings.setTemperatureUnit(TemperatureUnit.fahrenheit);
-                  Navigator.pop(context);
+                onTap: () async {
+                  await settings.setTemperatureUnit(TemperatureUnit.fahrenheit);
+                  if (context.mounted) Navigator.pop(context);
                 },
               ),
             ] else if (type == 'Wind') ...[
               _DialogOption(
                 title: 'km/h',
-                onTap: () {
-                  settings.setWindSpeedUnit(WindSpeedUnit.kmh);
-                  Navigator.pop(context);
+                onTap: () async {
+                  await settings.setWindSpeedUnit(WindSpeedUnit.kmh);
+                  if (context.mounted) Navigator.pop(context);
                 },
               ),
               _DialogOption(
                 title: 'm/s',
-                onTap: () {
-                  settings.setWindSpeedUnit(WindSpeedUnit.ms);
-                  Navigator.pop(context);
+                onTap: () async {
+                  await settings.setWindSpeedUnit(WindSpeedUnit.ms);
+                  if (context.mounted) Navigator.pop(context);
                 },
               ),
               _DialogOption(
                 title: 'mph',
-                onTap: () {
-                  settings.setWindSpeedUnit(WindSpeedUnit.mph);
-                  Navigator.pop(context);
+                onTap: () async {
+                  await settings.setWindSpeedUnit(WindSpeedUnit.mph);
+                  if (context.mounted) Navigator.pop(context);
                 },
               ),
             ] else if (type == 'Pressure') ...[
               _DialogOption(
                 title: 'hPa',
-                onTap: () {
-                  settings.setPressureUnit(PressureUnit.hpa);
-                  Navigator.pop(context);
+                onTap: () async {
+                  await settings.setPressureUnit(PressureUnit.hpa);
+                  if (context.mounted) Navigator.pop(context);
                 },
               ),
               _DialogOption(
                 title: 'mb',
-                onTap: () {
-                  settings.setPressureUnit(PressureUnit.mb);
-                  Navigator.pop(context);
+                onTap: () async {
+                  await settings.setPressureUnit(PressureUnit.mb);
+                  if (context.mounted) Navigator.pop(context);
                 },
               ),
             ],
@@ -261,9 +264,9 @@ class SettingsScreen extends StatelessWidget {
               .map(
                 (interval) => _DialogOption(
                   title: '$interval minutes',
-                  onTap: () {
-                    settings.setRefreshInterval(interval);
-                    Navigator.pop(context);
+                  onTap: () async {
+                    await settings.setRefreshInterval(interval);
+                    if (context.mounted) Navigator.pop(context);
                   },
                 ),
               )

@@ -1,15 +1,16 @@
 import 'package:get_it/get_it.dart';
-import 'package:atmos/features/weather/data/local/local_datasource.dart';
-import 'package:atmos/features/weather/data/remote/api_client.dart';
-import 'package:atmos/features/weather/data/remote/remote_datasource.dart';
-import 'package:atmos/features/weather/data/repository/repository_impl.dart';
-import 'package:atmos/features/weather/domain/repositories/weather_repository.dart';
-import 'package:atmos/features/weather/domain/usecases/weather_usecases.dart';
-import 'package:atmos/features/weather/presentation/providers/favorites_provider.dart';
-import 'package:atmos/features/weather/presentation/providers/search_provider.dart';
-import 'package:atmos/features/weather/presentation/providers/settings_provider.dart';
-import 'package:atmos/features/weather/presentation/providers/weather_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../features/weather/data/remote/api_client.dart';
+import '../features/weather/data/local/local_datasource.dart';
+import '../features/weather/data/remote/remote_datasource.dart';
+import '../features/weather/data/repository/repository_impl.dart';
+import '../features/weather/domain/usecases/weather_usecases.dart';
+import '../features/weather/domain/repositories/weather_repository.dart';
+import '../features/weather/presentation/providers/search_provider.dart';
+import '../features/weather/presentation/providers/weather_provider.dart';
+import '../features/weather/presentation/providers/settings_provider.dart';
+import '../features/weather/presentation/providers/favorites_provider.dart';
 
 final getIt = GetIt.instance;
 
@@ -22,7 +23,7 @@ Future<void> setupServiceLocator() async {
 
   // Register Data Layer
   getIt.registerSingleton<ApiClient>(ApiClient());
-  
+
   getIt.registerSingleton<RemoteWeatherDataSource>(
     RemoteWeatherDataSourceImpl(apiClient: getIt<ApiClient>()),
   );

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:atmos/core/constants/constants.dart';
-import 'package:atmos/core/error/failure_handler.dart';
+
+import '../../../../core/constants/constants.dart';
+import '../../../../core/error/failure_handler.dart';
+
 import '../dto/weather_dto.dart';
 
 /// Abstract local data source interface
@@ -92,8 +94,12 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
           'weather_code': weather.daily.weatherCodes,
           'precipitation_sum': weather.daily.rainfall,
           'wind_speed_10m_max': weather.daily.windSpeeds,
-          'sunrise': weather.daily.sunrises.map((s) => s.toIso8601String()).toList(),
-          'sunset': weather.daily.sunsets.map((s) => s.toIso8601String()).toList(),
+          'sunrise': weather.daily.sunrises
+              .map((s) => s.toIso8601String())
+              .toList(),
+          'sunset': weather.daily.sunsets
+              .map((s) => s.toIso8601String())
+              .toList(),
         },
         'timestamp': DateTime.now().toIso8601String(),
       });
@@ -192,7 +198,10 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
         'longitude': longitude,
         'timestamp': DateTime.now().toIso8601String(),
       });
-      await _favoritesBox.put(CacheConstants.favoritesCacheKey, jsonEncode(favorites));
+      await _favoritesBox.put(
+        CacheConstants.favoritesCacheKey,
+        jsonEncode(favorites),
+      );
     } catch (e) {
       throw CacheFailure(message: 'Failed to add to favorites');
     }
@@ -203,7 +212,10 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
     try {
       final favorites = await getFavorites();
       favorites.removeWhere((f) => f['key'] == key);
-      await _favoritesBox.put(CacheConstants.favoritesCacheKey, jsonEncode(favorites));
+      await _favoritesBox.put(
+        CacheConstants.favoritesCacheKey,
+        jsonEncode(favorites),
+      );
     } catch (e) {
       throw CacheFailure(message: 'Failed to remove from favorites');
     }

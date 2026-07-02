@@ -2,11 +2,12 @@ import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:atmos/app/app_theme.dart';
-import 'package:atmos/core/constants/constants.dart';
-import 'package:atmos/features/weather/presentation/providers/weather_provider.dart';
-import 'package:atmos/features/weather/presentation/widgets/common_widgets.dart';
-import 'package:atmos/features/weather/presentation/widgets/weather_widgets.dart';
+import '../../../../app/app_theme.dart';
+import '../../../../core/constants/constants.dart';
+
+import '../providers/weather_provider.dart';
+import '../widgets/common_widgets.dart';
+import '../widgets/weather_widgets.dart';
 
 /// Home screen showing current weather
 class HomeScreen extends StatefulWidget {
@@ -97,28 +98,34 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               if (weatherProvider.isOffline) const OfflineBanner(),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // Current weather display
-                      CurrentWeatherSection(weather: weatherProvider.weather!),
-                      SizedBox(height: AppTheme.spacing20.h),
+                child: RefreshIndicator(
+                  onRefresh: () => weatherProvider.refreshWeather(),
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        // Current weather display
+                        CurrentWeatherSection(
+                          weather: weatherProvider.weather!,
+                        ),
+                        SizedBox(height: AppTheme.spacing20.h),
 
-                      // Weather details grid
-                      WeatherDetailsGrid(weather: weatherProvider.weather!),
-                      SizedBox(height: AppTheme.spacing20.h),
+                        // Weather details grid
+                        WeatherDetailsGrid(weather: weatherProvider.weather!),
+                        SizedBox(height: AppTheme.spacing20.h),
 
-                      // Hourly forecast
-                      SectionHeader(title: UiStrings.today),
-                      HourlyForecastList(
-                        hourlyData: weatherProvider.weather!.hourly,
-                      ),
-                      SizedBox(height: AppTheme.spacing20.h),
+                        // Hourly forecast
+                        SectionHeader(title: UiStrings.today),
+                        HourlyForecastList(
+                          hourlyData: weatherProvider.weather!.hourly,
+                        ),
+                        SizedBox(height: AppTheme.spacing20.h),
 
-                      // High/Low temperatures
-                      HighLowTempCard(weather: weatherProvider.weather!),
-                      SizedBox(height: AppTheme.spacing32.h),
-                    ],
+                        // High/Low temperatures
+                        HighLowTempCard(weather: weatherProvider.weather!),
+                        SizedBox(height: AppTheme.spacing32.h),
+                      ],
+                    ),
                   ),
                 ),
               ),

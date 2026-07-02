@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'home_screen.dart';
 import 'search_screen.dart';
 import 'forecast_screen.dart';
+import 'details_screen.dart';
 import 'settings_screen.dart';
 
 /// Wrapper widget for bottom navigation
@@ -18,6 +20,7 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
+    const DetailsScreen(),
     const ForecastScreen(),
     const SettingsScreen(),
   ];
@@ -32,6 +35,7 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Details'),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
             label: 'Forecast',

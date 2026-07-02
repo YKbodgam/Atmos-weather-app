@@ -1,7 +1,8 @@
-import 'package:atmos/core/constants/constants.dart';
-import 'package:atmos/core/error/failure_handler.dart';
-import '../dto/weather_dto.dart';
+import '../../../../core/constants/constants.dart';
+import '../../../../core/error/failure_handler.dart';
+
 import 'api_client.dart';
+import '../dto/weather_dto.dart';
 
 /// Abstract remote data source interface
 abstract class RemoteWeatherDataSource {
@@ -32,9 +33,11 @@ class RemoteWeatherDataSourceImpl implements RemoteWeatherDataSource {
         queryParameters: {
           'latitude': latitude,
           'longitude': longitude,
-          'current': 'temperature,apparent_temperature,is_day,weather_code,wind_speed_10m,relative_humidity,surface_pressure,visibility,uv_index',
+          'current':
+              'temperature,apparent_temperature,is_day,weather_code,wind_speed_10m,relative_humidity,surface_pressure,visibility,uv_index',
           'hourly': 'temperature_2m,weather_code,wind_speed_10m',
-          'daily': 'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,wind_speed_10m_max',
+          'daily':
+              'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,wind_speed_10m_max',
           'timezone': 'auto',
         },
       );

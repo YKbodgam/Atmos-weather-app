@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failure_handler.dart';
+
 import '../entities/weather_entity.dart';
 
 /// Abstract repository for weather operations
