@@ -61,6 +61,7 @@ dependencies:
   
   # Screen Utilities
   flutter_screenutil: ^5.9.3
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:
