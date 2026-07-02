@@ -72,7 +72,7 @@ class DailyWeatherEntity extends Equatable {
   final List<double> minTemperatures;
   final List<int> weatherCodes;
   final List<double> rainfall;
-  final List<int> windSpeeds;
+  final List<double> windSpeeds;
   final List<DateTime> sunrises;
   final List<DateTime> sunsets;
 

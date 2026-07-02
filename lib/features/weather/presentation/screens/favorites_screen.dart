@@ -8,7 +8,7 @@ import 'package:atmos/features/weather/presentation/widgets/common_widgets.dart'
 
 /// Favorites screen showing saved cities
 class FavoritesScreen extends StatefulWidget {
-  const FavoritesScreen({Key? key}) : super(key: key);
+  const FavoritesScreen({super.key});
 
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
@@ -65,8 +65,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               return FavoriteCityTile(
                 city: city,
                 onRemove: () {
-                  favoritesProvider
-                      .removeFavorite('${city.name}-${city.country}');
+                  favoritesProvider.removeFavorite(
+                    '${city.name}-${city.country}',
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('${city.name} removed from favorites'),
@@ -94,11 +95,11 @@ class FavoriteCityTile extends StatelessWidget {
   final VoidCallback onTap;
 
   const FavoriteCityTile({
-    Key? key,
+    super.key,
     required this.city,
     required this.onRemove,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -111,10 +112,7 @@ class FavoriteCityTile extends StatelessWidget {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4),
         ],
       ),
       child: Material(
@@ -148,7 +146,10 @@ class FavoriteCityTile extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.star, color: AppTheme.secondaryColor),
+                      icon: const Icon(
+                        Icons.star,
+                        color: AppTheme.secondaryColor,
+                      ),
                       onPressed: onRemove,
                     ),
                     const Icon(Icons.arrow_forward_ios, size: 16),

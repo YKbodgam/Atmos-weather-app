@@ -6,7 +6,7 @@ import 'settings_screen.dart';
 
 /// Wrapper widget for bottom navigation
 class BottomNavWrapper extends StatefulWidget {
-  const BottomNavWrapper({Key? key}) : super(key: key);
+  const BottomNavWrapper({super.key});
 
   @override
   State<BottomNavWrapper> createState() => _BottomNavWrapperState();
@@ -25,22 +25,13 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _selectedIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
             label: 'Forecast',

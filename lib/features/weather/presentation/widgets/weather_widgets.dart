@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:atmos/app/app_theme.dart';
 import 'package:atmos/core/constants/constants.dart';
 import 'package:atmos/core/extensions/extensions.dart';
@@ -10,10 +11,7 @@ import 'common_widgets.dart';
 class CurrentWeatherSection extends StatelessWidget {
   final WeatherEntity weather;
 
-  const CurrentWeatherSection({
-    Key? key,
-    required this.weather,
-  }) : super(key: key);
+  const CurrentWeatherSection({super.key, required this.weather});
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +23,13 @@ class CurrentWeatherSection extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Theme.of(context).primaryColor.withOpacity(0.1),
-            Theme.of(context).primaryColor.withOpacity(0.05),
+            Theme.of(context).primaryColor.withValues(alpha: 0.1),
+            Theme.of(context).primaryColor.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
         border: Border.all(
-          color: Theme.of(context).primaryColor.withOpacity(0.2),
+          color: Theme.of(context).primaryColor.withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -45,9 +43,9 @@ class CurrentWeatherSection extends StatelessWidget {
                 children: [
                   Text(
                     weather.current.temperature.toTemperatureString(),
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      fontSize: 56.sp,
-                    ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.displayLarge?.copyWith(fontSize: 56.sp),
                   ),
                   Text(
                     'Partly Cloudy',
@@ -80,13 +78,13 @@ class CurrentWeatherSection extends StatelessWidget {
               ),
               _WeatherInfoChip(
                 label: UiStrings.windSpeed,
-                value: weather.current.windSpeed.toStringAsFixed(1) + ' km/h',
+                value: '${weather.current.windSpeed.toStringAsFixed(1)} km/h',
                 icon: Icons.air,
               ),
               _WeatherInfoChip(
                 label: UiStrings.uvIndex,
                 value: '${weather.current.uvIndex} Moderate',
-                icon: Icons.wb_cloud,
+                icon: Icons.cloud,
               ),
             ],
           ),
@@ -114,16 +112,13 @@ class _WeatherInfoChip extends StatelessWidget {
       children: [
         Icon(icon, size: 20.sp, color: AppTheme.textSecondary),
         SizedBox(height: AppTheme.spacing4.h),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
         SizedBox(height: AppTheme.spacing2.h),
         Text(
           value,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );
@@ -134,10 +129,7 @@ class _WeatherInfoChip extends StatelessWidget {
 class WeatherDetailsGrid extends StatelessWidget {
   final WeatherEntity weather;
 
-  const WeatherDetailsGrid({
-    Key? key,
-    required this.weather,
-  }) : super(key: key);
+  const WeatherDetailsGrid({super.key, required this.weather});
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +146,7 @@ class WeatherDetailsGrid extends StatelessWidget {
           WeatherCard(
             label: UiStrings.pressure,
             value: '${weather.current.pressure.toStringAsFixed(0)} hPa',
-            icon: Icons.gauge,
+            icon: Icons.badge,
           ),
           WeatherCard(
             label: UiStrings.visibility,
@@ -181,10 +173,7 @@ class WeatherDetailsGrid extends StatelessWidget {
 class HourlyForecastList extends StatelessWidget {
   final HourlyWeatherEntity hourlyData;
 
-  const HourlyForecastList({
-    Key? key,
-    required this.hourlyData,
-  }) : super(key: key);
+  const HourlyForecastList({super.key, required this.hourlyData});
 
   @override
   Widget build(BuildContext context) {
@@ -216,11 +205,11 @@ class HourlyForecastCard extends StatelessWidget {
   final int weatherCode;
 
   const HourlyForecastCard({
-    Key? key,
+    super.key,
     required this.time,
     required this.temperature,
     required this.weatherCode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -234,10 +223,7 @@ class HourlyForecastCard extends StatelessWidget {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4),
         ],
       ),
       child: Column(
@@ -247,16 +233,12 @@ class HourlyForecastCard extends StatelessWidget {
             time.toTimeString(),
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          Icon(
-            Icons.wb_sunny,
-            size: 24.sp,
-            color: AppTheme.secondaryColor,
-          ),
+          Icon(Icons.wb_sunny, size: 24.sp, color: AppTheme.secondaryColor),
           Text(
             '${temperature.toStringAsFixed(0)}°',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -268,10 +250,7 @@ class HourlyForecastCard extends StatelessWidget {
 class HighLowTempCard extends StatelessWidget {
   final WeatherEntity weather;
 
-  const HighLowTempCard({
-    Key? key,
-    required this.weather,
-  }) : super(key: key);
+  const HighLowTempCard({super.key, required this.weather});
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +263,7 @@ class HighLowTempCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -295,9 +274,9 @@ class HighLowTempCard extends StatelessWidget {
           children: [
             Text(
               "Today's High/Low",
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
             ),
             SizedBox(height: AppTheme.spacing12.h),
             Row(
@@ -305,32 +284,21 @@ class HighLowTempCard extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Text(
-                      'High',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    Text('High', style: Theme.of(context).textTheme.bodySmall),
                     SizedBox(height: AppTheme.spacing4.h),
                     Text(
-                      weather.daily.maxTemperatures.first
-                          .toTemperatureString(),
+                      weather.daily.maxTemperatures.first.toTemperatureString(),
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
-                const VerticalDivider(
-                  indent: 10,
-                  endIndent: 10,
-                ),
+                const VerticalDivider(indent: 10, endIndent: 10),
                 Column(
                   children: [
-                    Text(
-                      'Low',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    Text('Low', style: Theme.of(context).textTheme.bodySmall),
                     SizedBox(height: AppTheme.spacing4.h),
                     Text(
-                      weather.daily.minTemperatures.first
-                          .toTemperatureString(),
+                      weather.daily.minTemperatures.first.toTemperatureString(),
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
@@ -353,13 +321,13 @@ class DailyForecastTile extends StatelessWidget {
   final double rainfall;
 
   const DailyForecastTile({
-    Key? key,
+    super.key,
     required this.date,
     required this.maxTemp,
     required this.minTemp,
     required this.weatherCode,
     required this.rainfall,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -373,10 +341,7 @@ class DailyForecastTile extends StatelessWidget {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4),
         ],
       ),
       child: Row(
@@ -387,15 +352,15 @@ class DailyForecastTile extends StatelessWidget {
             children: [
               Text(
                 date.toDayName(),
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
               ),
               Text(
                 date.toDateString(),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppTheme.textSecondary,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
               ),
             ],
           ),
@@ -405,15 +370,15 @@ class DailyForecastTile extends StatelessWidget {
             children: [
               Text(
                 '${maxTemp.toStringAsFixed(0)}°',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
               ),
               Text(
                 '${minTemp.toStringAsFixed(0)}°',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppTheme.textSecondary,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
               ),
             ],
           ),

@@ -27,14 +27,17 @@ class CurrentWeatherDto {
   factory CurrentWeatherDto.fromJson(Map<String, dynamic> json) {
     return CurrentWeatherDto(
       temperature: (json['temperature'] as num?)?.toDouble() ?? 0.0,
-      apparentTemperature: (json['apparent_temperature'] as num?)?.toDouble() ?? 0.0,
+      apparentTemperature:
+          (json['apparent_temperature'] as num?)?.toDouble() ?? 0.0,
       relativeHumidity: (json['relative_humidity'] as num?)?.toInt() ?? 0,
       weatherCode: (json['weather_code'] as num?)?.toInt() ?? 0,
       windSpeed10m: (json['wind_speed_10m'] as num?)?.toDouble() ?? 0.0,
       surfacePressure: (json['surface_pressure'] as num?)?.toDouble() ?? 0.0,
       visibility: (json['visibility'] as num?)?.toDouble() ?? 10000,
       uvIndex: (json['uv_index'] as num?)?.toInt() ?? 0,
-      time: DateTime.parse(json['time'] as String? ?? DateTime.now().toString()),
+      time: DateTime.parse(
+        json['time'] as String? ?? DateTime.now().toString(),
+      ),
       isDay: (json['is_day'] as num?)?.toInt() == 1,
     );
   }
@@ -56,9 +59,21 @@ class HourlyWeatherDto {
 
   factory HourlyWeatherDto.fromJson(Map<String, dynamic> json) {
     final timeStrings = (json['time'] as List<dynamic>?)?.cast<String>() ?? [];
-    final temps = (json['temperature_2m'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [];
-    final codes = (json['weather_code'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ?? [];
-    final winds = (json['wind_speed_10m'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [];
+    final temps =
+        (json['temperature_2m'] as List<dynamic>?)
+            ?.map((e) => (e as num).toDouble())
+            .toList() ??
+        [];
+    final codes =
+        (json['weather_code'] as List<dynamic>?)
+            ?.map((e) => (e as num).toInt())
+            .toList() ??
+        [];
+    final winds =
+        (json['wind_speed_10m'] as List<dynamic>?)
+            ?.map((e) => (e as num).toDouble())
+            .toList() ??
+        [];
 
     return HourlyWeatherDto(
       times: timeStrings.map((t) => DateTime.parse(t)).toList(),
@@ -76,7 +91,7 @@ class DailyWeatherDto {
   final List<double> minTemperatures;
   final List<int> weatherCodes;
   final List<double> rainfall;
-  final List<int> windSpeeds;
+  final List<double> windSpeeds;
   final List<DateTime> sunrises;
   final List<DateTime> sunsets;
 
@@ -93,13 +108,35 @@ class DailyWeatherDto {
 
   factory DailyWeatherDto.fromJson(Map<String, dynamic> json) {
     final dateStrings = (json['time'] as List<dynamic>?)?.cast<String>() ?? [];
-    final maxTemps = (json['temperature_2m_max'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [];
-    final minTemps = (json['temperature_2m_min'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [];
-    final codes = (json['weather_code'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ?? [];
-    final rains = (json['precipitation_sum'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [];
-    final winds = (json['wind_speed_10m_max'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ?? [];
-    final sunriseStrings = (json['sunrise'] as List<dynamic>?)?.cast<String>() ?? [];
-    final sunsetStrings = (json['sunset'] as List<dynamic>?)?.cast<String>() ?? [];
+    final maxTemps =
+        (json['temperature_2m_max'] as List<dynamic>?)
+            ?.map((e) => (e as num).toDouble())
+            .toList() ??
+        [];
+    final minTemps =
+        (json['temperature_2m_min'] as List<dynamic>?)
+            ?.map((e) => (e as num).toDouble())
+            .toList() ??
+        [];
+    final codes =
+        (json['weather_code'] as List<dynamic>?)
+            ?.map((e) => (e as num).toInt())
+            .toList() ??
+        [];
+    final rains =
+        (json['precipitation_sum'] as List<dynamic>?)
+            ?.map((e) => (e as num).toDouble())
+            .toList() ??
+        [];
+    final winds =
+        (json['wind_speed_10m_max'] as List<dynamic>?)
+            ?.map((e) => (e as num).toDouble())
+            .toList() ??
+        [];
+    final sunriseStrings =
+        (json['sunrise'] as List<dynamic>?)?.cast<String>() ?? [];
+    final sunsetStrings =
+        (json['sunset'] as List<dynamic>?)?.cast<String>() ?? [];
 
     return DailyWeatherDto(
       dates: dateStrings.map((d) => DateTime.parse(d)).toList(),
@@ -137,9 +174,15 @@ class WeatherResponseDto {
       latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
       longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
       timezone: json['timezone'] as String? ?? 'UTC',
-      current: CurrentWeatherDto.fromJson(json['current'] as Map<String, dynamic>? ?? {}),
-      hourly: HourlyWeatherDto.fromJson(json['hourly'] as Map<String, dynamic>? ?? {}),
-      daily: DailyWeatherDto.fromJson(json['daily'] as Map<String, dynamic>? ?? {}),
+      current: CurrentWeatherDto.fromJson(
+        json['current'] as Map<String, dynamic>? ?? {},
+      ),
+      hourly: HourlyWeatherDto.fromJson(
+        json['hourly'] as Map<String, dynamic>? ?? {},
+      ),
+      daily: DailyWeatherDto.fromJson(
+        json['daily'] as Map<String, dynamic>? ?? {},
+      ),
     );
   }
 }
@@ -181,9 +224,11 @@ class GeocodingResponseDto {
   GeocodingResponseDto({required this.results});
 
   factory GeocodingResponseDto.fromJson(Map<String, dynamic> json) {
-    final resultsList = (json['results'] as List<dynamic>?)
-        ?.map((e) => GeocodingResultDto.fromJson(e as Map<String, dynamic>))
-        .toList() ?? [];
+    final resultsList =
+        (json['results'] as List<dynamic>?)
+            ?.map((e) => GeocodingResultDto.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
 
     return GeocodingResponseDto(results: resultsList);
   }

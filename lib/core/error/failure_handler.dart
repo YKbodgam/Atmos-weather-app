@@ -1,50 +1,43 @@
 /// Base failure class for all error handling
 abstract class Failure {
   final String message;
-  
+
   Failure({required this.message});
 }
 
 /// Network-related failures
 class NetworkFailure extends Failure {
-  NetworkFailure({String message = 'Network error occurred'})
-      : super(message: message);
+  NetworkFailure({super.message = 'Network error occurred'});
 }
 
 /// Timeout failures
 class TimeoutFailure extends Failure {
-  TimeoutFailure({String message = 'Request timeout'})
-      : super(message: message);
+  TimeoutFailure({super.message = 'Request timeout'});
 }
 
 /// Server-side failures
 class ServerFailure extends Failure {
   final int? statusCode;
-  
-  ServerFailure({String message = 'Server error', this.statusCode})
-      : super(message: message);
+
+  ServerFailure({super.message = 'Server error', this.statusCode});
 }
 
 /// Cache-related failures
 class CacheFailure extends Failure {
-  CacheFailure({String message = 'Cache error'})
-      : super(message: message);
+  CacheFailure({super.message = 'Cache error'});
 }
 
 /// JSON parsing failures
 class ParsingFailure extends Failure {
-  ParsingFailure({String message = 'Failed to parse data'})
-      : super(message: message);
+  ParsingFailure({super.message = 'Failed to parse data'});
 }
 
 /// Generic unknown failures
 class UnknownFailure extends Failure {
-  UnknownFailure({String message = 'Unknown error occurred'})
-      : super(message: message);
+  UnknownFailure({super.message = 'Unknown error occurred'});
 }
 
 /// Not found failures
 class NotFoundFailure extends Failure {
-  NotFoundFailure({String message = 'Resource not found'})
-      : super(message: message);
+  NotFoundFailure({super.message = 'Resource not found'});
 }

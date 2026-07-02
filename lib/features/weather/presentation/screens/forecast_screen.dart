@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:provider/provider.dart';
-import 'package:atmos/app/app_theme.dart';
+
 import 'package:atmos/core/constants/constants.dart';
 import 'package:atmos/features/weather/presentation/providers/weather_provider.dart';
 import 'package:atmos/features/weather/presentation/widgets/common_widgets.dart';

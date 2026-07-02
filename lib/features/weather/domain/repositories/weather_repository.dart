@@ -1,4 +1,6 @@
-import 'package:atmos/core/error/failure_handler.dart';
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/failure_handler.dart';
 import '../entities/weather_entity.dart';
 
 /// Abstract repository for weather operations
@@ -35,54 +37,4 @@ abstract class WeatherRepository {
 
   /// Clear all cache
   Future<void> clearCache();
-}
-
-/// Helper type alias for Either pattern
-typedef Either<L, R> = Future<Result<L, R>>;
-
-/// Result type for Either pattern
-abstract class Result<L, R> {
-  T fold<T>(
-    T Function(L failure) onFailure,
-    T Function(R success) onSuccess,
-  );
-}
-
-/// Left result (failure)
-class Left<L, R> extends Result<L, R> {
-  final L value;
-  Left(this.value);
-
-  @override
-  T fold<T>(
-    T Function(L failure) onFailure,
-    T Function(R success) onSuccess,
-  ) {
-    return onFailure(value);
-  }
-}
-
-/// Right result (success)
-class Right<L, R> extends Result<L, R> {
-  final R value;
-  Right(this.value);
-
-  @override
-  T fold<T>(
-    T Function(L failure) onFailure,
-    T Function(R success) onSuccess,
-  ) {
-    return onSuccess(value);
-  }
-}
-
-/// Extension methods for Either pattern
-extension EitherExtension<L, R> on Either<L, R> {
-  Future<T> fold<T>(
-    T Function(L failure) onFailure,
-    T Function(R success) onSuccess,
-  ) async {
-    final result = await this;
-    return result.fold(onFailure, onSuccess);
-  }
 }

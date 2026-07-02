@@ -7,7 +7,7 @@ import 'package:atmos/core/constants/constants.dart';
 class LoadingWidget extends StatelessWidget {
   final String? message;
 
-  const LoadingWidget({Key? key, this.message}) : super(key: key);
+  const LoadingWidget({super.key, this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +41,11 @@ class ErrorWidget extends StatelessWidget {
   final String? retryLabel;
 
   const ErrorWidget({
-    Key? key,
+    super.key,
     required this.message,
     required this.onRetry,
     this.retryLabel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +61,7 @@ class ErrorWidget extends StatelessWidget {
               color: Theme.of(context).colorScheme.error,
             ),
             SizedBox(height: AppTheme.spacing16.h),
-            Text(
-              'Oops!',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+            Text('Oops!', style: Theme.of(context).textTheme.headlineSmall),
             SizedBox(height: AppTheme.spacing8.h),
             Text(
               message,
@@ -91,12 +88,12 @@ class EmptyStateWidget extends StatelessWidget {
   final Widget? action;
 
   const EmptyStateWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.message,
     this.icon,
     this.action,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -107,11 +104,7 @@ class EmptyStateWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icon != null)
-              Icon(
-                icon,
-                size: 64.sp,
-                color: AppTheme.textTertiary,
-              ),
+              Icon(icon, size: 64.sp, color: AppTheme.textTertiary),
             if (icon != null) SizedBox(height: AppTheme.spacing16.h),
             Text(
               title,
@@ -121,9 +114,9 @@ class EmptyStateWidget extends StatelessWidget {
             SizedBox(height: AppTheme.spacing8.h),
             Text(
               message,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.textSecondary,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
               textAlign: TextAlign.center,
             ),
             if (action != null) ...[
@@ -139,7 +132,7 @@ class EmptyStateWidget extends StatelessWidget {
 
 /// Offline banner widget
 class OfflineBanner extends StatelessWidget {
-  const OfflineBanner({Key? key}) : super(key: key);
+  const OfflineBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -150,20 +143,16 @@ class OfflineBanner extends StatelessWidget {
         vertical: AppTheme.spacing12.h,
       ),
       decoration: BoxDecoration(
-        color: AppTheme.warningColor.withOpacity(0.1),
+        color: AppTheme.warningColor.withValues(alpha: 0.1),
         border: Border(
           bottom: BorderSide(
-            color: AppTheme.warningColor.withOpacity(0.3),
+            color: AppTheme.warningColor.withValues(alpha: 0.3),
           ),
         ),
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.wifi_off,
-            color: AppTheme.warningColor,
-            size: 20.sp,
-          ),
+          Icon(Icons.wifi_off, color: AppTheme.warningColor, size: 20.sp),
           SizedBox(width: AppTheme.spacing8.w),
           Expanded(
             child: Column(
@@ -179,7 +168,7 @@ class OfflineBanner extends StatelessWidget {
                 Text(
                   UiStrings.showingCachedData,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.warningColor.withOpacity(0.7),
+                    color: AppTheme.warningColor.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -199,12 +188,12 @@ class PrimaryButton extends StatelessWidget {
   final Icon? icon;
 
   const PrimaryButton({
-    Key? key,
+    super.key,
     required this.label,
     required this.onPressed,
     this.isLoading = false,
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -212,13 +201,13 @@ class PrimaryButton extends StatelessWidget {
       onPressed: isLoading ? null : onPressed,
       icon: isLoading
           ? SizedBox(
-            width: 20.w,
-            height: 20.w,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-          )
+              width: 20.w,
+              height: 20.w,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
           : (icon ?? const SizedBox.shrink()),
       label: Text(label),
     );
@@ -230,11 +219,7 @@ class SectionHeader extends StatelessWidget {
   final String title;
   final VoidCallback? onSeeAll;
 
-  const SectionHeader({
-    Key? key,
-    required this.title,
-    this.onSeeAll,
-  }) : super(key: key);
+  const SectionHeader({super.key, required this.title, this.onSeeAll});
 
   @override
   Widget build(BuildContext context) {
@@ -246,10 +231,7 @@ class SectionHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text(title, style: Theme.of(context).textTheme.titleLarge),
           if (onSeeAll != null)
             GestureDetector(
               onTap: onSeeAll,
@@ -275,12 +257,12 @@ class WeatherCard extends StatelessWidget {
   final Color? backgroundColor;
 
   const WeatherCard({
-    Key? key,
+    super.key,
     required this.label,
     required this.value,
     required this.icon,
     this.backgroundColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +273,7 @@ class WeatherCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -300,22 +282,15 @@ class WeatherCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            size: 24.sp,
-            color: Theme.of(context).primaryColor,
-          ),
+          Icon(icon, size: 24.sp, color: Theme.of(context).primaryColor),
           SizedBox(height: AppTheme.spacing8.h),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(label, style: Theme.of(context).textTheme.bodySmall),
           SizedBox(height: AppTheme.spacing4.h),
           Text(
             value,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -328,17 +303,10 @@ class CustomDivider extends StatelessWidget {
   final double? height;
   final Color? color;
 
-  const CustomDivider({
-    Key? key,
-    this.height,
-    this.color,
-  }) : super(key: key);
+  const CustomDivider({super.key, this.height, this.color});
 
   @override
   Widget build(BuildContext context) {
-    return Divider(
-      height: height ?? 1,
-      color: color ?? AppTheme.dividerColor,
-    );
+    return Divider(height: height ?? 1, color: color ?? AppTheme.dividerColor);
   }
 }

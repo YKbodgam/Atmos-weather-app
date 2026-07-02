@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:atmos/app/app_theme.dart';
 import 'package:atmos/core/constants/constants.dart';
 import 'package:atmos/features/weather/presentation/providers/settings_provider.dart';
 
 /// Settings screen for app preferences
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(UiStrings.settings),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text(UiStrings.settings), elevation: 0),
       body: Consumer<SettingsProvider>(
         builder: (context, settings, _) {
           return SingleChildScrollView(
@@ -141,7 +139,9 @@ class SettingsScreen extends StatelessWidget {
 
                 // Reset button
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppTheme.spacing16.w),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppTheme.spacing16.w,
+                  ),
                   child: ElevatedButton(
                     onPressed: () {
                       showDialog(
@@ -258,13 +258,15 @@ class SettingsScreen extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: intervals
-              .map((interval) => _DialogOption(
-                title: '$interval minutes',
-                onTap: () {
-                  settings.setRefreshInterval(interval);
-                  Navigator.pop(context);
-                },
-              ))
+              .map(
+                (interval) => _DialogOption(
+                  title: '$interval minutes',
+                  onTap: () {
+                    settings.setRefreshInterval(interval);
+                    Navigator.pop(context);
+                  },
+                ),
+              )
               .toList(),
         ),
       ),
@@ -278,11 +280,7 @@ class _SettingsTile extends StatelessWidget {
   final String value;
   final VoidCallback? onTap;
 
-  const _SettingsTile({
-    required this.title,
-    required this.value,
-    this.onTap,
-  });
+  const _SettingsTile({required this.title, required this.value, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -293,9 +291,9 @@ class _SettingsTile extends StatelessWidget {
         children: [
           Text(
             value,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.textSecondary,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
           ),
           SizedBox(width: AppTheme.spacing8.w),
           const Icon(Icons.chevron_right),
@@ -322,10 +320,7 @@ class _SettingsToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(title),
-      trailing: Switch(
-        value: value,
-        onChanged: onChanged,
-      ),
+      trailing: Switch(value: value, onChanged: onChanged),
     );
   }
 }
@@ -335,10 +330,7 @@ class _DialogOption extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const _DialogOption({
-    required this.title,
-    required this.onTap,
-  });
+  const _DialogOption({required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -356,10 +348,7 @@ class _DialogOption extends StatelessWidget {
             border: Border.all(color: AppTheme.borderColor),
             borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
           ),
-          child: Text(
-            title,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          child: Text(title, style: Theme.of(context).textTheme.bodyMedium),
         ),
       ),
     );

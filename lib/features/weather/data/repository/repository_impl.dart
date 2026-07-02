@@ -1,7 +1,9 @@
-import 'package:atmos/core/error/failure_handler.dart';
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/failure_handler.dart';
 import '../../domain/entities/weather_entity.dart';
 import '../../domain/repositories/weather_repository.dart';
-import '../dto/weather_dto.dart';
+
 import '../local/local_datasource.dart';
 import '../mapper/entity_mapper.dart';
 import '../remote/remote_datasource.dart';
@@ -32,15 +34,20 @@ class WeatherRepositoryImpl implements WeatherRepository {
 
       final entity = WeatherMapper.toWeatherEntity(remoteWeather);
       return Right<Failure, WeatherEntity>(entity);
-    } on Failure catch (e) {
-      // Try to get cached data on failure
-      final cachedWeather = await localDataSource.getCachedWeather();
-      if (cachedWeather != null) {
-        final entity = WeatherMapper.toWeatherEntity(cachedWeather);
-        return Right<Failure, WeatherEntity>(entity);
-      }
-      return Left<Failure, WeatherEntity>(e);
     } catch (e) {
+      // Try to get cached data on failure
+      try {
+        final cachedWeather = await localDataSource.getCachedWeather();
+        if (cachedWeather != null) {
+          final entity = WeatherMapper.toWeatherEntity(cachedWeather);
+          return Right<Failure, WeatherEntity>(entity);
+        }
+      } catch (_) {}
+
+      if (e is Failure) {
+        return Left<Failure, WeatherEntity>(e);
+      }
+
       return Left<Failure, WeatherEntity>(
         UnknownFailure(message: e.toString()),
       );
@@ -72,9 +79,10 @@ class WeatherRepositoryImpl implements WeatherRepository {
 
       final cities = WeatherMapper.toCityEntityList(response.results);
       return Right<Failure, List<CityEntity>>(cities);
-    } on Failure catch (e) {
-      return Left<Failure, List<CityEntity>>(e);
     } catch (e) {
+      if (e is Failure) {
+        return Left<Failure, List<CityEntity>>(e);
+      }
       return Left<Failure, List<CityEntity>>(
         UnknownFailure(message: e.toString()),
       );
@@ -99,12 +107,14 @@ class WeatherRepositoryImpl implements WeatherRepository {
     try {
       final searches = await localDataSource.getRecentSearches();
       return searches
-          .map((json) => CityEntity(
-            name: json['name'] as String? ?? 'Unknown',
-            country: json['country'] as String? ?? 'Unknown',
-            latitude: json['latitude'] as double? ?? 0.0,
-            longitude: json['longitude'] as double? ?? 0.0,
-          ))
+          .map(
+            (json) => CityEntity(
+              name: json['name'] as String? ?? 'Unknown',
+              country: json['country'] as String? ?? 'Unknown',
+              latitude: json['latitude'] as double? ?? 0.0,
+              longitude: json['longitude'] as double? ?? 0.0,
+            ),
+          )
           .toList();
     } catch (e) {
       return [];
@@ -141,12 +151,14 @@ class WeatherRepositoryImpl implements WeatherRepository {
     try {
       final favorites = await localDataSource.getFavorites();
       return favorites
-          .map((json) => CityEntity(
-            name: json['name'] as String? ?? 'Unknown',
-            country: json['country'] as String? ?? 'Unknown',
-            latitude: json['latitude'] as double? ?? 0.0,
-            longitude: json['longitude'] as double? ?? 0.0,
-          ))
+          .map(
+            (json) => CityEntity(
+              name: json['name'] as String? ?? 'Unknown',
+              country: json['country'] as String? ?? 'Unknown',
+              latitude: json['latitude'] as double? ?? 0.0,
+              longitude: json['longitude'] as double? ?? 0.0,
+            ),
+          )
           .toList();
     } catch (e) {
       return [];

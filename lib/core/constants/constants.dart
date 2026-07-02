@@ -47,7 +47,7 @@ class UiStrings {
   static const String delete = 'Delete';
   static const String edit = 'Edit';
   static const String save = 'Save';
-  
+
   // Weather related
   static const String currentWeather = 'Current Weather';
   static const String forecast = 'Forecast';
@@ -62,18 +62,18 @@ class UiStrings {
   static const String airQuality = 'Air Quality';
   static const String today = 'Today';
   static const String tomorrow = 'Tomorrow';
-  
+
   // Search
   static const String searchCity = 'Search City';
   static const String searchHint = 'Search for any city';
   static const String recentSearches = 'Recent Searches';
   static const String noResults = 'No results found';
-  
+
   // Offline
   static const String offline = 'You are offline';
   static const String showingCachedData = 'Showing cached data';
   static const String checkConnection = 'Check Connection';
-  
+
   // Settings
   static const String settings = 'Settings';
   static const String preferences = 'Preferences';
@@ -83,7 +83,13 @@ class UiStrings {
   static const String timeFormat = 'Time Format';
   static const String about = 'About';
   static const String version = 'Version';
-  
+  static const String refreshInterval = 'Refresh Interval';
+  static const String useCellularData = 'Use Cellular Data';
+  static const String enableNotifications = 'Enable Notifications';
+  static const String darkMode = 'Dark Mode';
+  static const String resetToDefaults = 'Reset to Defaults';
+  static const String appInfo = 'App Info';
+
   // Favorites
   static const String favorites = 'Favorites';
   static const String addToFavorites = 'Add to Favorites';

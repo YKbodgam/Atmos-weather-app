@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:atmos/app/app_theme.dart';
 import 'package:atmos/core/constants/constants.dart';
 import 'package:atmos/features/weather/presentation/providers/weather_provider.dart';
-import 'package:atmos/features/weather/presentation/providers/settings_provider.dart';
 import 'package:atmos/features/weather/presentation/widgets/common_widgets.dart';
 import 'package:atmos/features/weather/presentation/widgets/weather_widgets.dart';
 
 /// Home screen showing current weather
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -21,7 +21,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final weatherProvider = Provider.of<WeatherProvider>(context, listen: false);
+      final weatherProvider = Provider.of<WeatherProvider>(
+        context,
+        listen: false,
+      );
       weatherProvider.fetchWeather(
         latitude: AppConstants.defaultLatitude,
         longitude: AppConstants.defaultLongitude,
@@ -43,9 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Text(
               AppConstants.defaultCountry,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.textSecondary,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
             ),
           ],
         ),
@@ -63,14 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
             itemBuilder: (BuildContext context) => [
-              const PopupMenuItem(
-                value: 'favorites',
-                child: Text('Favorites'),
-              ),
-              const PopupMenuItem(
-                value: 'settings',
-                child: Text('Settings'),
-              ),
+              const PopupMenuItem(value: 'favorites', child: Text('Favorites')),
+              const PopupMenuItem(value: 'settings', child: Text('Settings')),
             ],
           ),
         ],
@@ -104,15 +101,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       // Current weather display
-                      CurrentWeatherSection(
-                        weather: weatherProvider.weather!,
-                      ),
+                      CurrentWeatherSection(weather: weatherProvider.weather!),
                       SizedBox(height: AppTheme.spacing20.h),
 
                       // Weather details grid
-                      WeatherDetailsGrid(
-                        weather: weatherProvider.weather!,
-                      ),
+                      WeatherDetailsGrid(weather: weatherProvider.weather!),
                       SizedBox(height: AppTheme.spacing20.h),
 
                       // Hourly forecast
@@ -123,9 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: AppTheme.spacing20.h),
 
                       // High/Low temperatures
-                      HighLowTempCard(
-                        weather: weatherProvider.weather!,
-                      ),
+                      HighLowTempCard(weather: weatherProvider.weather!),
                       SizedBox(height: AppTheme.spacing32.h),
                     ],
                   ),

@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+
 import 'package:atmos/core/error/failure_handler.dart';
 import '../entities/weather_entity.dart';
 import '../repositories/weather_repository.dart';
@@ -28,10 +30,12 @@ class SearchCitiesUseCase {
   Future<Either<Failure, List<CityEntity>>> call({
     required String query,
   }) async {
-    if (query.isEmpty) {
-      return Left(NotFoundFailure(message: 'Query cannot be empty'));
+    if (query.trim().isEmpty) {
+      return Left<Failure, List<CityEntity>>(
+        NotFoundFailure(message: 'Query cannot be empty'),
+      );
     }
-    return repository.searchCities(query: query);
+    return await repository.searchCities(query: query);
   }
 }
 

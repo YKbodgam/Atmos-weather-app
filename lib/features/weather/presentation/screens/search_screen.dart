@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:atmos/app/app_theme.dart';
 import 'package:atmos/core/constants/constants.dart';
 import 'package:atmos/features/weather/presentation/providers/search_provider.dart';
@@ -10,7 +11,7 @@ enum SearchState { idle, loading, success, error, empty }
 
 /// Search screen for finding cities
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({super.key});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -24,7 +25,10 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     _searchController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final searchProvider = Provider.of<SearchProvider>(context, listen: false);
+      final searchProvider = Provider.of<SearchProvider>(
+        context,
+        listen: false,
+      );
       searchProvider.loadRecentSearches();
     });
   }
@@ -38,10 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(UiStrings.searchCity),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text(UiStrings.searchCity), elevation: 0),
       body: Column(
         children: [
           Padding(
@@ -146,10 +147,10 @@ class SearchField extends StatelessWidget {
   final Function(String) onChanged;
 
   const SearchField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -161,12 +162,12 @@ class SearchField extends StatelessWidget {
         prefixIcon: const Icon(Icons.search),
         suffixIcon: controller.text.isNotEmpty
             ? IconButton(
-              icon: const Icon(Icons.clear),
-              onPressed: () {
-                controller.clear();
-                onChanged('');
-              },
-            )
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  controller.clear();
+                  onChanged('');
+                },
+              )
             : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
@@ -184,11 +185,11 @@ class SearchResultTile extends StatelessWidget {
   final bool showRecent;
 
   const SearchResultTile({
-    Key? key,
+    super.key,
     required this.city,
     required this.onTap,
     this.showRecent = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -201,11 +202,11 @@ class SearchResultTile extends StatelessWidget {
       subtitle: Text(city.country),
       trailing: showRecent
           ? IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              // Handle remove from recent
-            },
-          )
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                // Handle remove from recent
+              },
+            )
           : const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
     );
